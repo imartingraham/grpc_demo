@@ -1,0 +1,33 @@
+version: "3.7"
+
+services:
+  bot:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - goroot:/go
+      - vscode-server:/home/go/.vscode-server
+      - ~/.ssh:/home/go/.ssh
+      - .:/home/go/app
+    ports:
+      - 3000:3000
+    links:
+      - db
+    environment:
+      - PORT=3000
+      - POSTGRES_HOST=db
+      - POSTGRES_DB=grpc_dev
+      - POSTGRES_USER=grpc_dev
+      - POSTGRES_PASSWORD=grpc_dev
+  db:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=grpc_dev
+      - POSTGRES_USER=grpc_dev
+      - POSTGRES_PASSWORD=grpc_dev
+volumes:
+  vscode-server:
+  goroot:
